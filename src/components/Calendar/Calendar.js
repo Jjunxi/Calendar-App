@@ -38,7 +38,7 @@ class Calendar extends Component {
       showDayView: true,
       showMonthView: false
     });
-    
+
     event.stopPropagation();
   };
 
@@ -84,16 +84,13 @@ class Calendar extends Component {
             pickDate={this.state.pickDate}
             visible={this.state.showModal}
             onClose={() => this.setState({ showModal: false })}
-          >
-            {" "}
-          </EventModal>
+          />
         )}
 
         {this.state.pickDate != null &&
           this.state.showDayView === true && (
             <DayView
               pickDate={this.state.pickDate}
-              date={this.state.date}
               eventList={this.props.eventList}
               onClick={this.handleBack}
             />

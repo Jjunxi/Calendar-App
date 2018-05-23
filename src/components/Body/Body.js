@@ -14,28 +14,29 @@ class Body extends Component {
   };
 
   clickDayView(el, event) {
+    console.log(el.day);
+    
     this.props.onDayView(event, el);
   }
 
-  filterCurrentEvents() {
-    const {date, eventList} = this.props;
-    const end = date
-      .endOf('month')
-      .format("YYYY-MM-DD");
-    const start = date
-      .startOf('month')
-      .format("YYYY-MM-DD");
+  getBusyDays() {
+    const busyDays = [];
+    const eventList = this.props.eventList;
+    const events = eventList
+      ? eventList.filter(v => v.completed === false)
+      : eventList;
 
-    for (let i = 0; i < eventList.length; i++) {
-      const event = eventList[i];
-      const eventMoment = moment(`${event.datetime.years}-${event.datetime.months + 2}-${event.datetime.date} ${event.datetime.hours}:${event.datetime.minutes}`, "YYYY-MM-DD HH:mm");
-      if (eventMoment.isBetween(start, end)) {
-        this
-          .state
-          .events
-          .push(event);
-      }
+    for (let i = 0; i < events.length; i++) {
+      const event = events[i];
+      const eventMoment = moment(
+        `${event.datetime.years}-${event.datetime.months + 2}-${
+          event.datetime.date
+        } ${event.datetime.hours}:${event.datetime.minutes}`,
+        "YYYY-MM-DD HH:mm"
+      );
+      busyDays.push(eventMoment.format("YYYY-MM-DD"));
     }
+    return busyDays;
   }
 
   getAllDays(mq) {
@@ -57,6 +58,7 @@ class Body extends Component {
         className: day.isSame(moment(), "day")
           ? "current calendar-row-format-" + mq
           : "valid calendar-row-format-" + mq
+        // (busyDays.indexOf(i) > -1 ? " busy" : "")
       });
     }
 
@@ -75,16 +77,24 @@ class Body extends Component {
   }
 
   renderDay(el) {
+    const busyDays = this.getBusyDays();
+
     return (
       <Col
         span={3}
-        className={el.className}
+        className={
+          el.className +
+          (busyDays.indexOf(el.day.format("YYYY-MM-DD")) > -1 ? " busy" : "")
+        }
         onClick={() => {
           this.props.onClick(el);
         }}
       >
-        {el.day.format("D")}&nbsp;&nbsp;
-        <Icon type="schedule" onClick={this.clickDayView.bind(this, el)} />
+        {el.day.format("D")} &nbsp;&nbsp;
+        {busyDays.indexOf(el.day.format("YYYY-MM-DD")) > -1 
+        ? (<Icon type="schedule" onClick={this.clickDayView.bind(this, el)} />) 
+        : (null)}
+        
       </Col>
     );
   }
