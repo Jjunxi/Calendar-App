@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React from "react";
 import { Row, Tag, Icon, Divider, List } from "antd";
 
 import moment from "moment";
 import config from "../../config";
 
-class DayView extends Component {
+class DayView extends React.PureComponent {
   filterEventsOfDay() {
     const events = [];
     const { pickDate, eventList } = this.props;

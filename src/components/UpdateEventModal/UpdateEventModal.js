@@ -18,51 +18,6 @@ class UpdateEventModal extends React.PureComponent {
     onClose: PropTypes.func.isRequired
   };
 
-  handleSavePC = () => {
-    if (this.state.time === null || this.state.name === "") {
-      this.showError(config.plateform.PC);
-      return;
-    }
-    this.save(config.plateform.PC);
-    this.showNotification(config.plateform.PC);
-  };
-
-  handleSaveMB = () => {
-    if (this.state.time === null || this.state.name === "") {
-      this.showError(config.plateform.MB);
-      return;
-    }
-    this.save(config.plateform.MB);
-    this.showNotification(config.plateform.MB);
-  };
-
-  showNotification(mq) {
-    const msg = "Add Event Successfully.";
-    notification["success"]({
-      message: msg,
-      description:
-        "You add an event on " +
-        this.props.pickDate.format("YYYY-MMMM-DD") +
-        ".",
-      duration: 2
-    });
-  }
-
-  showError(mq) {
-    const msg = "Please select time and set name!";
-    notification["error"]({
-      message: msg,
-      duration: 2
-    });
-  }
-
-  clear() {
-    this.setState({
-      name: "",
-      time: null
-    });
-  }
-
   renderPC() {
     const { datetime, time, name, visible, onClose, onUpdate } = this.props;
 
